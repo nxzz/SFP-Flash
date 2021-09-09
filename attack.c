@@ -64,6 +64,7 @@ int writeAndCompSN(int fd) {
     perror(I2CDEVICE);
     return -EIO;
   }
+  usleep(WAIT_PWD);
 
   // SN一文字読み出し
   data[0] = SN_REG;
@@ -72,6 +73,7 @@ int writeAndCompSN(int fd) {
     perror(I2CDEVICE);
     return -EIO;
   }
+  usleep(WAIT_PWD);
   ret = read(fd, data, 1);
   if (ret < 0) {
     perror(I2CDEVICE);
@@ -81,6 +83,8 @@ int writeAndCompSN(int fd) {
 }
 
 int main() {
+  FILE *fp;
+  fp = fopen("pass.log", "w+");
   int fd; /* ファイルディスクリプタ */
   /* I2C 通信デバイスのオープン */
   fd = open(I2CDEVICE, O_RDWR);
@@ -99,9 +103,13 @@ int main() {
       perror(I2CDEVICE);
       exit(1);
     }
-    if (i % 0xFF == 0) {
+    if (i % 0x100 == 0) {
       printf("now: %#x\n", i);
+      fprintf(fp, "now: %#x\n", i);
+      fflush(fp);
     }
   }
   close(fd);
+  fclose(fp);
+  return 0;
 }
