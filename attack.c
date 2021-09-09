@@ -4,17 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* LM75温度センサがつながっているI2Cバスの指定 */
+/* I2Cバスの指定 */
 #define I2CDEVICE "/dev/i2c-10"
 
-/* LM75温度センサのI2Cアドレス指定(7bitアドレス値) */
 #define SFP_50_ADDR 0x50
 #define SFP_51_ADDR 0x51
 
 #define SN_REG 0x44
 #define PASSWORD_REG 0x7B
 
+// 一文字書き込んでみるやつ
 #define COM_STR 0x46
+
+// 待ち時間 ms
+#define WAIT_PWD 5
 
 int writePassword(int fd, u_int32_t pwd) {
   int ret;
@@ -34,7 +37,7 @@ int writePassword(int fd, u_int32_t pwd) {
   data[3] = (pwd > 8) & 0xFF;
   data[4] = pwd & 0xFF;
   ret = write(fd, data, 5);
-  usleep(5);
+  usleep(WAIT_PWD);
   if (ret < 0) {
     perror(I2CDEVICE);
     return -EIO;
