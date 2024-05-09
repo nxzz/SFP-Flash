@@ -1,2 +1,4 @@
 attack
 *.log
+temp.*
+patch.bin
