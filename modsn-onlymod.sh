@@ -46,5 +46,5 @@ for e in ${arraybase[@]}; do
    printf "%02x" ${e} >> temp.hex
     let i++
 done
-cat temp.hex | xxd -r -p > patch.bin
+cat temp.hex | xxd -r -p > $3
 rm temp.hex
