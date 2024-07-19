@@ -24,8 +24,8 @@ class SFPModule(object):
         port.write_to(0x7B,0x0)
         port.write_to(0x7C,0x0)
         port.write_to(0x7D,0x0)
-        port.write_to(0x7F,0x0)
-    
+        port.write_to(0x7E,0x0)
+
     def write(self, bin):
         port = self._port
         print(len(bin))
@@ -33,7 +33,7 @@ class SFPModule(object):
         for i in range(len(bin)):
             print(i,bin[i],bytes([bin[i]]))
             port.write_to(i, bytes([bin[i]]))
-        
+
 if __name__ == '__main__':
     sfp = SFPModule()
     sfp.open()
