@@ -183,11 +183,15 @@ class SFPModule(object):
     def init(self):
         port = self._port51
 
+    def read(self):
+        port = self._port
+        return port.read_from(0x0,0x80)
+
     def writeCh(self, ituch):
         print('itu ch: ', ituch, 'ch')
         freq = ituGrid[sys.argv[1]]
         print('freq: ', freq, 'nm')
-        print('hex: ',format(int(freq * 20), 'x'))
+        # print('hex: ',format(int(freq * 20), 'x'))
         b = bytes.fromhex(format(int(freq * 20), 'x'))
         port = self._port51
         port.write_to(0x7F,[0x2])
@@ -199,3 +203,5 @@ if __name__ == '__main__':
     sfp.open()
     sfp.init()
     sfp.writeCh(sys.argv[1])
+    dump = sfp.read()
+    print(bytes(dump[0x14:0x24]).decode(),bytes(dump[0x28:0x38]).decode(),bytes(dump[0x44:0x54]).decode())
